@@ -1,0 +1,26 @@
+
+# vscode
+.vscode
+
+# macos
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# windows
+Thumbs.db
+
+# node
+node_modules/
+
+# project
+
+## environment variables
+.env
+.env.*
+!.env.template
+
+## folders
+temp/
+logs/
+dist/
