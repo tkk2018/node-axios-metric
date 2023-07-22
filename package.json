@@ -19,6 +19,6 @@
   },
   "peerDependencies": {
     "axios": "^1.4.0",
-    "http-metric": "file:../http-metric"
+    "http-metric": "^1.0.0"
   }
 }
