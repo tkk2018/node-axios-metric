@@ -108,7 +108,11 @@ export type ErrorMetricCallback = (metric: AxiosErrorMetric, error: unknown) => 
 export function useRequestMetric(axios: AxiosStatic | AxiosInstance, cb: RequestMetricCallback) {
   axios.interceptors.request.use((config) => {
     const metric = new AxiosRequestMetric(config);
-    config.metadata.metric.request = metric;
+    config.metadata = {
+      metric: {
+        request: metric
+      },
+    };
     cb?.(metric, config);
     return config;
   });
