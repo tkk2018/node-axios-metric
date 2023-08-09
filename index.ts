@@ -1,6 +1,4 @@
-"use strict";
-
-import axios_static, { AxiosInstance, AxiosResponse, AxiosStatic, InternalAxiosRequestConfig } from "axios";
+import axios_static, { AxiosInstance, AxiosResponse, AxiosStatic, InternalAxiosRequestConfig, RawAxiosRequestHeaders, RawAxiosResponseHeaders } from "axios";
 import { EndMetric, HttpMetric, RequestMetric, ResponseMetric } from "http-metric";
 
 export interface Metadata {
@@ -17,7 +15,7 @@ declare module "axios" {
 export class AxiosRequestMetric implements HttpMetric, RequestMetric {
   method?: string;
   url?: string;
-  headers: Record<string, any>;
+  headers: RawAxiosRequestHeaders;
   data?: any;
   start_time: number;
 
@@ -47,14 +45,14 @@ export class AxiosResponseMetric implements HttpMetric, ResponseMetric {
         data: response.data,
       },
       end_time: end_time,
-      response_time: end_time - response.config.metadata.metric.request.start_time
+      response_time: end_time - response.config.metadata.metric.request.start_time,
     });
   }
 
   method?: string;
   url?: string;
   request?: RequestMetric;
-  headers?: Record<string, any>;
+  headers?: RawAxiosResponseHeaders;
   response: { status_code: number; status_message: string; data?: any; };
   end_time: number;
   response_time: number;
@@ -110,13 +108,13 @@ export function useRequestMetric(axios: AxiosStatic | AxiosInstance, cb: Request
     const metric = new AxiosRequestMetric(config);
     config.metadata = {
       metric: {
-        request: metric
+        request: metric,
       },
     };
     cb?.(metric, config);
     return config;
   });
-}
+};
 
 export function useResponseMetric(axios: AxiosStatic | AxiosInstance, res: ResponseMetricCallback | undefined | null, err?: ErrorMetricCallback | undefined | null) {
   axios.interceptors.response.use((response) => {
